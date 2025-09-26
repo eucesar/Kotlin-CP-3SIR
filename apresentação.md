@@ -71,7 +71,7 @@ fun getGamesByStudio(studio: String): List<Game> {
 
 ---
 
-## 🎮 **SAMUEL - Componentes Reutilizáveis**
+## 🎮 **CESAR - Componentes Reutilizáveis**
 
 ### 1. **GameCard.kt - Card para Exibir Jogos**
 
@@ -174,7 +174,7 @@ fun PreviewGameCard() {
 
 ---
 
-## 🎨 **CÉSAR - Interface Principal e Listas Lazy**
+## 🎨 **SAMUEL - Interface Principal e Listas Lazy**
 
 ### 1. **MainActivity.kt - Ponto de Entrada**
 
@@ -348,3 +348,4 @@ fun PreviewGamesScreen() {
 ---
 
 *Este código demonstra os fundamentos do Jetpack Compose com foco em listas lazy, componentes reutilizáveis e gerenciamento de estado reativo.*
+
