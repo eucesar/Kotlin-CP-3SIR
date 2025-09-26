@@ -1,5 +1,3 @@
-# Fundamentos Jetpack Compose Listas Lazy
-
 Este projeto é um aplicativo Android desenvolvido em Kotlin, utilizando Jetpack Compose para a construção de interfaces modernas e reativas. O objetivo principal é demonstrar o uso de listas Lazy (LazyColumn e LazyRow) para exibir e filtrar jogos favoritos por estúdio.
 
 ## Funcionalidades
@@ -43,7 +41,7 @@ app/
 
 1. Clone este repositório:
    ```sh
-   git clone <url-do-repositorio>
+   git clone https://github.com/eucesar/Kotlin-CP-3SIR.git
    ```
 2. Abra o projeto no Android Studio.
 3. Execute em um emulador ou dispositivo físico Android.
@@ -56,10 +54,18 @@ app/
 
 ## Screenshots
 
-> Adicione aqui prints da tela principal, busca e filtro aplicados (opcional).
+> Adicione aqui prints da tela principal, busca e filtro aplicados (opcional):
+<img width="326" height="705" alt="image" src="https://github.com/user-attachments/assets/3cc51d98-0d46-418f-a29b-aa8159a5827d" />
+<img width="336" height="698" alt="image" src="https://github.com/user-attachments/assets/708a1e4f-7aeb-43a3-a8d8-3e8013c23ea9" />
+<img width="326" height="703" alt="image" src="https://github.com/user-attachments/assets/ffba210e-2579-47ca-b126-e8d1cf751f0b" />
+<img width="341" height="701" alt="image" src="https://github.com/user-attachments/assets/83702536-d528-40c0-98d7-c8e86306a920" />
+
 
 ## Autor
-- Desenvolvido por Ewerton Carreira.
+- Desenvolvido por: </br>
+Rafael Villela - 550275  </br>
+Samuel Aguiar - 550212  </br>
+Cesar Iglesias - 98007 </br>
 
 ---
 
