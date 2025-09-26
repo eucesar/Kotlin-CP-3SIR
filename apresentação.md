@@ -1,108 +1,18 @@
-# Apresentação do Projeto: Fundamentos Jetpack Compose - Listas Lazy
+# Apresentação do Código: Fundamentos Jetpack Compose - Listas Lazy
 
-## Visão Geral do Projeto
+## Visão Geral
 
-Este projeto Android demonstra os conceitos fundamentais do Jetpack Compose, especificamente o uso de listas lazy para exibir uma coleção de jogos favoritos. O aplicativo permite filtrar jogos por estúdio e apresenta uma interface moderna e responsiva.
-
----
-
-## 🎯 **VILELA - Estrutura do Projeto e Configuração**
-
-### Configuração do Projeto
-
-#### 1. **build.gradle.kts (Nível do Projeto)**
-```kotlin
-plugins {
-    alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.kotlin.compose) apply false
-}
-```
-
-**Explicação:** Este arquivo define os plugins que serão aplicados em todo o projeto. O `apply false` significa que os plugins são declarados mas não aplicados diretamente aqui, sendo aplicados nos módulos específicos.
-
-#### 2. **app/build.gradle.kts (Módulo Principal)**
-```kotlin
-plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
-}
-
-android {
-    namespace = "eucesar.com.github.fundamentos_jetpack_compose_listas_lazy"
-    compileSdk = 35
-    
-    defaultConfig {
-        applicationId = "eucesar.com.github.fundamentos_jetpack_compose_listas_lazy"
-        minSdk = 24
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
-    }
-    
-    buildFeatures {
-        compose = true
-    }
-}
-```
-
-**Explicação:** 
-- **namespace:** Define o pacote principal da aplicação
-- **compileSdk:** Versão do Android SDK usada para compilar
-- **minSdk:** Versão mínima do Android suportada (Android 7.0)
-- **targetSdk:** Versão alvo do Android
-- **buildFeatures.compose:** Habilita o Jetpack Compose
-
-#### 3. **Dependências Principais**
-```kotlin
-dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.material3)
-}
-```
-
-**Explicação:**
-- **core-ktx:** Extensões Kotlin para Android
-- **lifecycle-runtime-ktx:** Gerenciamento de ciclo de vida
-- **activity-compose:** Integração do Compose com Activity
-- **compose-bom:** Bill of Materials para versões consistentes
-- **material3:** Componentes de design Material 3
-
-#### 4. **AndroidManifest.xml**
-```xml
-<application
-    android:allowBackup="true"
-    android:icon="@mipmap/ic_launcher"
-    android:label="@string/app_name"
-    android:theme="@style/Theme.Fundamentosjetpackcomposelistaslazy">
-    <activity
-        android:name=".MainActivity"
-        android:exported="true"
-        android:theme="@style/Theme.Fundamentosjetpackcomposelistaslazy">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-</application>
-```
-
-**Explicação:**
-- **MainActivity:** Activity principal da aplicação
-- **intent-filter:** Define a MainActivity como ponto de entrada
-- **exported="true":** Permite que outros apps iniciem esta activity
+Este documento apresenta a explicação detalhada dos códigos do projeto Android que demonstra o uso de Jetpack Compose com listas lazy para exibir uma coleção de jogos favoritos.
 
 ---
 
-## 🎮 **SAMUEL - Modelo de Dados e Lógica de Negócio**
+## 🎯 **VILELA - Modelo de Dados e Repositório**
 
 ### 1. **Modelo de Dados - Game.kt**
+
 ```kotlin
+package eucesar.com.github.fundamentos_jetpack_compose_listas_lazy.model
+
 data class Game(
     val id: Long = 0,
     val title: String = "",
@@ -112,9 +22,10 @@ data class Game(
 ```
 
 **Explicação:**
-- **data class:** Classe especial do Kotlin que gera automaticamente métodos como `equals()`, `hashCode()`, `toString()` e `copy()`
-- **Propriedades imutáveis:** Todas as propriedades são `val`, garantindo imutabilidade
+- **`data class`:** Classe especial do Kotlin que gera automaticamente métodos como `equals()`, `hashCode()`, `toString()` e `copy()`
+- **Propriedades imutáveis:** Todas as propriedades são `val`, garantindo que os dados não sejam alterados após a criação
 - **Valores padrão:** Cada propriedade tem um valor padrão, facilitando a criação de instâncias
+- **Estrutura simples:** Representa um jogo com ID, título, estúdio e ano de lançamento
 
 ### 2. **Repositório de Dados - GameList.kt**
 
@@ -125,15 +36,22 @@ fun getAllGames(): List<Game> {
         Game(id = 1, title = "Double Dragon", studio = "Technos", releaseYear = 1987),
         Game(id = 2, title = "Batletoads", studio = "Tradewest", releaseYear = 1991),
         Game(id = 3, title = "Enduro", studio = "Activision", releaseYear = 1983),
-        // ... mais jogos
+        Game(id = 4, title = "Ikari Warriors", studio = "SNK", releaseYear = 1986),
+        Game(id = 5, title = "Captain Commando", studio = "Capcom", releaseYear = 1991),
+        Game(id = 6, title = "Mario Bros", studio = "Nintendo", releaseYear = 1983),
+        Game(id = 7, title = "Tiger Heli", studio = "Taito", releaseYear = 1985),
+        Game(id = 8, title = "Mega Man", studio = "Capcom", releaseYear = 1987),
+        Game(id = 9, title = "Gradius", studio = "Konami", releaseYear = 1985),
+        Game(id = 10, title = "Gun Fight", studio = "Taito", releaseYear = 1975)
     )
 }
 ```
 
 **Explicação:**
-- **List<Game>:** Retorna uma lista imutável de jogos
-- **listOf():** Função do Kotlin para criar listas imutáveis
+- **`List<Game>`:** Retorna uma lista imutável de jogos
+- **`listOf()`:** Função do Kotlin para criar listas imutáveis
 - **Dados estáticos:** Simula uma fonte de dados (em um app real, viria de uma API ou banco de dados)
+- **Jogos clássicos:** Contém uma coleção de jogos clássicos dos anos 80 e 90
 
 #### Função para Filtrar por Estúdio
 ```kotlin
@@ -145,194 +63,18 @@ fun getGamesByStudio(studio: String): List<Game> {
 ```
 
 **Explicação:**
-- **filter():** Função de alta ordem que filtra elementos da lista
-- **startsWith():** Verifica se o nome do estúdio começa com o texto pesquisado
-- **ignoreCase = true:** Torna a busca case-insensitive
-- **it:** Referência implícita ao elemento atual da lista
-
-### 3. **Tema e Estilização**
-
-#### Color.kt
-```kotlin
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
-
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
-```
-
-**Explicação:**
-- **Cores em hexadecimal:** Formato ARGB (Alpha, Red, Green, Blue)
-- **Sufixos 80/40:** Diferentes intensidades para temas claro e escuro
-- **Material Design:** Cores seguem as diretrizes do Material Design
-
-#### Theme.kt
-```kotlin
-@Composable
-fun FundamentosjetpackcomposelistaslazyTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
-) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
-}
-```
-
-**Explicação:**
-- **@Composable:** Anotação que marca uma função como componente Compose
-- **isSystemInDarkTheme():** Detecta automaticamente o tema do sistema
-- **dynamicColor:** Usa cores dinâmicas do Android 12+
-- **MaterialTheme:** Aplica o tema Material Design ao conteúdo
+- **`filter()`:** Função de alta ordem que filtra elementos da lista baseado em uma condição
+- **`startsWith()`:** Verifica se o nome do estúdio começa com o texto pesquisado
+- **`ignoreCase = true`:** Torna a busca case-insensitive (não diferencia maiúsculas de minúsculas)
+- **`it`:** Referência implícita ao elemento atual da lista durante a iteração
+- **Retorno:** Lista filtrada contendo apenas jogos do estúdio especificado
 
 ---
 
-## 🎨 **CÉSAR - Interface do Usuário e Componentes**
+## 🎮 **SAMUEL - Componentes Reutilizáveis**
 
-### 1. **MainActivity.kt - Ponto de Entrada**
+### 1. **GameCard.kt - Card para Exibir Jogos**
 
-```kotlin
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            FundamentosjetpackcomposelistaslazyTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    GamesScreen(
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
-    }
-}
-```
-
-**Explicação:**
-- **ComponentActivity:** Activity otimizada para Jetpack Compose
-- **enableEdgeToEdge():** Permite que o conteúdo use toda a tela
-- **setContent:** Define o conteúdo da activity usando Compose
-- **Scaffold:** Layout base que fornece estrutura para a tela
-- **innerPadding:** Espaçamento interno para evitar sobreposição com barras do sistema
-
-### 2. **Tela Principal - GamesScreen**
-
-#### Estado da Tela
-```kotlin
-@Composable
-fun GamesScreen(modifier: Modifier = Modifier) {
-    var searchTextState by remember { mutableStateOf("") }
-    var gamesListState by remember { mutableStateOf(getAllGames()) }
-```
-
-**Explicação:**
-- **remember:** Mantém o estado durante recomposições
-- **mutableStateOf:** Cria estado mutável observável
-- **by:** Delegation property que simplifica o acesso ao estado
-- **searchTextState:** Controla o texto da busca
-- **gamesListState:** Controla a lista de jogos exibida
-
-#### Campo de Busca
-```kotlin
-OutlinedTextField(
-    value = searchTextState,
-    onValueChange = { searchTextState = it },
-    modifier = Modifier.fillMaxWidth(),
-    label = { Text(text = "Nome do estúdio") },
-    trailingIcon = {
-        IconButton(onClick = { gamesListState = getGamesByStudio(searchTextState) }) {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = ""
-            )
-        }
-    }
-)
-```
-
-**Explicação:**
-- **OutlinedTextField:** Campo de texto com borda
-- **value/onValueChange:** Binding bidirecional do estado
-- **fillMaxWidth():** Ocupa toda a largura disponível
-- **trailingIcon:** Ícone no final do campo
-- **IconButton:** Botão clicável com ícone
-
-#### Botão de Limpar Filtro
-```kotlin
-if (searchTextState.isNotEmpty() || gamesListState != getAllGames()) {
-    Text(
-        text = "Limpar filtro",
-        modifier = Modifier
-            .padding(top = 8.dp)
-            .fillMaxWidth()
-            .clickable {
-                searchTextState = ""
-                gamesListState = getAllGames()
-            },
-        fontWeight = FontWeight.SemiBold,
-        color = androidx.compose.ui.graphics.Color.Blue
-    )
-}
-```
-
-**Explicação:**
-- **Condição if:** Só exibe quando há filtro ativo
-- **clickable:** Torna o texto clicável
-- **padding:** Adiciona espaçamento
-- **FontWeight.SemiBold:** Define peso da fonte
-
-### 3. **Listas Lazy**
-
-#### LazyRow para Estúdios
-```kotlin
-LazyRow(){
-    items(gamesListState){ game ->
-        StudioCard(game = game, onClick = {
-            searchTextState = game.studio
-            gamesListState = getGamesByStudio(game.studio)
-        })
-    }
-}
-```
-
-**Explicação:**
-- **LazyRow:** Lista horizontal que renderiza apenas itens visíveis
-- **items():** Função que itera sobre a lista
-- **onClick:** Callback executado ao clicar no card
-- **Performance:** Renderiza apenas itens visíveis, economizando memória
-
-#### LazyColumn para Jogos
-```kotlin
-LazyColumn() {
-    items(gamesListState) {
-        GameCard(game = it)
-    }
-}
-```
-
-**Explicação:**
-- **LazyColumn:** Lista vertical otimizada
-- **it:** Referência implícita ao elemento atual
-- **Recomposição:** Apenas itens alterados são recompostos
-
-### 4. **Componentes Reutilizáveis**
-
-#### GameCard.kt
 ```kotlin
 @Composable
 fun GameCard(game: Game) {
@@ -374,14 +116,17 @@ fun GameCard(game: Game) {
 ```
 
 **Explicação:**
-- **Card:** Container com elevação e sombra
-- **Row:** Layout horizontal
-- **Column:** Layout vertical
-- **weight():** Define proporção do espaço ocupado
-- **Alignment.CenterVertically:** Centraliza verticalmente
-- **Arrangement.SpaceBetween:** Distribui espaço entre elementos
+- **`@Composable`:** Anotação que marca a função como um componente Compose
+- **`Card`:** Container com elevação e sombra seguindo Material Design
+- **`Row`:** Layout horizontal que organiza elementos lado a lado
+- **`Column`:** Layout vertical para organizar título e estúdio
+- **`weight(3f)` e `weight(1f)`:** Define proporção do espaço ocupado (3:1)
+- **`Alignment.CenterVertically`:** Centraliza elementos verticalmente
+- **`Arrangement.SpaceBetween`:** Distribui espaço entre elementos
+- **`padding(bottom = 8.dp)`:** Adiciona espaçamento inferior entre cards
 
-#### StudioCard.kt
+### 2. **StudioCard.kt - Card para Exibir Estúdios**
+
 ```kotlin
 @Composable
 fun StudioCard(game: Game, onClick: (() -> Unit)? = null) {
@@ -401,13 +146,168 @@ fun StudioCard(game: Game, onClick: (() -> Unit)? = null) {
 ```
 
 **Explicação:**
-- **size(100.dp):** Define tamanho fixo
-- **clickable:** Torna o card clicável
-- **enabled:** Controla se o clique está habilitado
-- **onClick?.invoke():** Executa o callback se não for null
-- **Arrangement.Center:** Centraliza o conteúdo
+- **`size(100.dp)`:** Define tamanho fixo de 100dp para o card
+- **`clickable`:** Torna o card clicável
+- **`enabled = onClick != null`:** Só permite clique se houver callback
+- **`onClick?.invoke()`:** Executa o callback se não for null (safe call)
+- **`Arrangement.Center`:** Centraliza o conteúdo verticalmente
+- **`Alignment.CenterHorizontally`:** Centraliza o conteúdo horizontalmente
+- **`padding(end = 4.dp)`:** Adiciona espaçamento à direita entre cards
 
-### 5. **Previews para Desenvolvimento**
+### 3. **Previews para Desenvolvimento**
+
+```kotlin
+@Preview(showBackground = true, name = "Game Card Preview")
+@Composable
+fun PreviewGameCard() {
+    FundamentosjetpackcomposelistaslazyTheme {
+        GameCard(game = Game(1, "Example Game", "Example Studio", 2023))
+    }
+}
+```
+
+**Explicação:**
+- **`@Preview`:** Anotação que gera preview no Android Studio
+- **`showBackground = true`:** Mostra fundo no preview
+- **`name`:** Nome identificador do preview
+- **Facilita desenvolvimento:** Permite visualizar componentes sem executar o app
+
+---
+
+## 🎨 **CÉSAR - Interface Principal e Listas Lazy**
+
+### 1. **MainActivity.kt - Ponto de Entrada**
+
+```kotlin
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            FundamentosjetpackcomposelistaslazyTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    GamesScreen(
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
+            }
+        }
+    }
+}
+```
+
+**Explicação:**
+- **`ComponentActivity`:** Activity otimizada para Jetpack Compose
+- **`enableEdgeToEdge()`:** Permite que o conteúdo use toda a tela
+- **`setContent`:** Define o conteúdo da activity usando Compose
+- **`Scaffold`:** Layout base que fornece estrutura para a tela
+- **`innerPadding`:** Espaçamento interno para evitar sobreposição com barras do sistema
+
+### 2. **GamesScreen - Tela Principal**
+
+#### Gerenciamento de Estado
+```kotlin
+@Composable
+fun GamesScreen(modifier: Modifier = Modifier) {
+    var searchTextState by remember { mutableStateOf("") }
+    var gamesListState by remember { mutableStateOf(getAllGames()) }
+```
+
+**Explicação:**
+- **`remember`:** Mantém o estado durante recomposições
+- **`mutableStateOf`:** Cria estado mutável observável
+- **`by`:** Delegation property que simplifica o acesso ao estado
+- **`searchTextState`:** Controla o texto da busca
+- **`gamesListState`:** Controla a lista de jogos exibida
+
+#### Campo de Busca
+```kotlin
+OutlinedTextField(
+    value = searchTextState,
+    onValueChange = { searchTextState = it },
+    modifier = Modifier.fillMaxWidth(),
+    label = { Text(text = "Nome do estúdio") },
+    trailingIcon = {
+        IconButton(onClick = { gamesListState = getGamesByStudio(searchTextState) }) {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = ""
+            )
+        }
+    }
+)
+```
+
+**Explicação:**
+- **`OutlinedTextField`:** Campo de texto com borda
+- **`value/onValueChange`:** Binding bidirecional do estado
+- **`fillMaxWidth()`:** Ocupa toda a largura disponível
+- **`trailingIcon`:** Ícone no final do campo
+- **`IconButton`:** Botão clicável com ícone de busca
+
+#### Botão de Limpar Filtro
+```kotlin
+if (searchTextState.isNotEmpty() || gamesListState != getAllGames()) {
+    Text(
+        text = "Limpar filtro",
+        modifier = Modifier
+            .padding(top = 8.dp)
+            .fillMaxWidth()
+            .clickable {
+                searchTextState = ""
+                gamesListState = getAllGames()
+            },
+        fontWeight = FontWeight.SemiBold,
+        color = androidx.compose.ui.graphics.Color.Blue
+    )
+}
+```
+
+**Explicação:**
+- **Condição `if`:** Só exibe quando há filtro ativo
+- **`clickable`:** Torna o texto clicável
+- **`padding`:** Adiciona espaçamento superior
+- **`FontWeight.SemiBold`:** Define peso da fonte
+- **Reset:** Limpa o filtro e restaura a lista completa
+
+### 3. **Listas Lazy - Performance Otimizada**
+
+#### LazyRow para Estúdios
+```kotlin
+LazyRow(){
+    items(gamesListState){ game ->
+        StudioCard(game = game, onClick = {
+            searchTextState = game.studio
+            gamesListState = getGamesByStudio(game.studio)
+        })
+    }
+}
+```
+
+**Explicação:**
+- **`LazyRow`:** Lista horizontal que renderiza apenas itens visíveis
+- **`items()`:** Função que itera sobre a lista
+- **`onClick`:** Callback executado ao clicar no card
+- **Performance:** Renderiza apenas itens visíveis, economizando memória
+- **Filtro automático:** Ao clicar, filtra jogos do estúdio selecionado
+
+#### LazyColumn para Jogos
+```kotlin
+LazyColumn() {
+    items(gamesListState) {
+        GameCard(game = it)
+    }
+}
+```
+
+**Explicação:**
+- **`LazyColumn`:** Lista vertical otimizada
+- **`it`:** Referência implícita ao elemento atual
+- **Recomposição:** Apenas itens alterados são recompostos
+- **Scroll infinito:** Suporta listas grandes sem problemas de performance
+- **Layout otimizado:** Renderiza apenas itens visíveis na tela
+
+### 4. **Previews da Tela Principal**
 
 ```kotlin
 @Preview(showBackground = true, name = "Games Screen Preview")
@@ -420,65 +320,31 @@ fun PreviewGamesScreen() {
 ```
 
 **Explicação:**
-- **@Preview:** Anotação que gera preview no Android Studio
-- **showBackground:** Mostra fundo no preview
-- **name:** Nome identificador do preview
-- **Desenvolvimento:** Facilita o desenvolvimento visual sem executar o app
+- **Preview completo:** Mostra como a tela inteira aparece
+- **Desenvolvimento visual:** Facilita o desenvolvimento sem executar o app
+- **Teste de layout:** Permite verificar se o layout está correto
 
 ---
 
-## 🚀 **Como Executar o Projeto**
+## 🎓 **Conceitos Demonstrados**
 
-### Pré-requisitos
-- Android Studio (versão mais recente)
-- JDK 11 ou superior
-- Android SDK com API 24+
+### **Jetpack Compose:**
+- **Componentes reutilizáveis:** GameCard e StudioCard
+- **Estado reativo:** Gerenciamento com `remember` e `mutableStateOf`
+- **Layouts:** Row, Column, LazyRow, LazyColumn
+- **Modifiers:** padding, fillMaxWidth, weight, clickable
 
-### Passos para Execução
+### **Performance:**
+- **Listas Lazy:** Renderização otimizada para listas grandes
+- **Recomposição inteligente:** Apenas componentes alterados são recompostos
+- **Estado local:** Gerenciamento eficiente do estado da tela
 
-1. **Clone ou baixe o projeto**
-2. **Abra no Android Studio**
-3. **Sincronize o projeto** (Sync Project with Gradle Files)
-4. **Execute o projeto** (Run 'app' ou Shift+F10)
-
-### Estrutura de Arquivos
-```
-app/src/main/java/eucesar/com/github/fundamentos_jetpack_compose_listas_lazy/
-├── MainActivity.kt              # Activity principal
-├── componentes/
-│   ├── GameCard.kt             # Card para exibir jogos
-│   └── StudioCard.kt           # Card para exibir estúdios
-├── model/
-│   └── Game.kt                 # Modelo de dados
-├── repository/
-│   └── GameList.kt             # Fonte de dados
-└── ui/theme/
-    ├── Color.kt                # Cores do tema
-    ├── Theme.kt                # Configuração do tema
-    └── Type.kt                 # Tipografia
-```
+### **Material Design:**
+- **Cards:** Componentes com elevação e sombra
+- **Typography:** Diferentes tamanhos e pesos de fonte
+- **Cores:** Sistema de cores consistente
+- **Layout responsivo:** Adaptação a diferentes tamanhos de tela
 
 ---
 
-## 📱 **Funcionalidades do App**
-
-1. **Lista de Jogos:** Exibe uma lista vertical de jogos favoritos
-2. **Filtro por Estúdio:** Permite buscar jogos por nome do estúdio
-3. **Cards de Estúdio:** Lista horizontal de estúdios clicáveis
-4. **Limpar Filtro:** Botão para resetar a busca
-5. **Interface Responsiva:** Adapta-se a diferentes tamanhos de tela
-
----
-
-## 🎓 **Conceitos Aprendidos**
-
-- **Jetpack Compose:** Framework moderno para UI Android
-- **Listas Lazy:** Otimização de performance para listas grandes
-- **Estado Reativo:** Gerenciamento de estado com `remember` e `mutableStateOf`
-- **Componentes Reutilizáveis:** Criação de componentes modulares
-- **Material Design 3:** Sistema de design moderno
-- **Kotlin:** Linguagem de programação concisa e expressiva
-
----
-
-*Projeto desenvolvido para demonstrar os fundamentos do Jetpack Compose com foco em listas lazy e componentes reutilizáveis.*
+*Este código demonstra os fundamentos do Jetpack Compose com foco em listas lazy, componentes reutilizáveis e gerenciamento de estado reativo.*
